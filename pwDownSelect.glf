@@ -5,7 +5,7 @@ proc DownSelectDomains { domainList } {
 
   set edges [list]
   foreach d $domainList {
-    lappend edges [$d getEdges]
+    lappend edges {*}[$d getEdges]
     #puts "domain $d contains edges: [$d getEdges]"
   }
 
