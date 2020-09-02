@@ -47,6 +47,70 @@ proc DownSelectBlocks { blockList } {
   return [lsort -unique $domains]
 }
 
+# This procedure returns all the quilts that make up the model(s) passed in
+# modelList.
+proc DownSelectModels { modelList } {
+  set quilts [list]
+  foreach m $modelList {
+    lappend quilts {*}[$m getQuilts]
+    #puts "model $m contains quilts: [$m getQuilts]"
+  }
+
+  return [lsort -unique $quilts]
+}
+
+# This procedure returns all the boundaries that make up the quilt(s) passed in
+# quiltList.
+proc DownSelectQuilts { quiltList } {
+  set boundaries [list]
+  foreach q $quiltList {
+    lappend boundaries {*}[$q getBoundaries]
+    #puts "quilt $q contains boundaries: [$q getBoundaries]"
+  }
+
+  return [lsort -unique $boundaries]
+}
+
+# This procedure filters the database(s) pass in databaseList and calls either
+# the DownSelectModels or DownSelectQuilts procedure, bases on what it finds
+# therein. Models are preferred to quilts.
+proc DownSelectDatabases { databaseList } {
+
+  set nModels 0
+  set models [list]
+  set nQuilts 0
+  set quilts [list]
+
+  foreach d $databaseList {
+    set type [$d getType]
+    if { $type == "pw::Model" } {
+      incr nModels
+      lappend models $d
+    } elseif { $type == "pw::Quilt" } {
+      incr nQuilts
+      lappend quilts $d
+    }
+  }
+  #puts "     found $nModels models and $nQuilts quilts"
+
+  set selection [list]
+
+  # Models override quilts for now...
+  if { $nModels > 0 } {
+    #puts "          Down selecting models"
+    set selection [lsort -unique [DownSelectModels $models]]
+    puts "     selected [llength $selection] quilts"
+  } elseif { $nQuilts > 0 } {
+    #puts "          Down selecting quilts"
+    set selection [lsort -unique [DownSelectQuilts $quilts]]
+    puts "     selected [llength $selection] boundaries"
+  } else {
+    puts "Error: something went wrong in DownSelectDatabases"
+  }
+
+  return $selection
+}
+
 #
 # Use selected entity or prompt user for selection if nothing is selected at
 # run time. Currently only Blocks, Domains, and Databases are supported.
@@ -103,8 +167,8 @@ if { $nDomains > 0 } {
   set downSelection [DownSelectBlocks $blocks]
   puts "     selected [llength $downSelection] domains"
 } elseif { $nDatabases > 0 } {
-  puts "TODO: Processing Databases..."
-  exit
+  puts "Down selecting Databases..."
+  set downSelection [DownSelectDatabases $databases]
 } else {
   puts "ERROR: No valid entities to operate on, exiting"
   exit
