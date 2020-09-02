@@ -19,7 +19,7 @@ proc DownSelectDomains { domainList } {
   #pw::Display setSelectedEntities $connectors
   #pw::Display update
 
-  return $connectors
+  return [lsort -unique $connectors]
 }
 
 proc DownSelectBlocks { blockList } {
@@ -40,7 +40,7 @@ proc DownSelectBlocks { blockList } {
   #pw::Display setSelectedEntities $domains
   #pw::Display update
 
-  return $domains
+  return [lsort -unique $domains]
 }
 
 #
@@ -88,9 +88,11 @@ set downSelection [list]
 if { $nDomains > 0 } {
   puts "Processing Domains..."
   set downSelection [DownSelectDomains $domains]
+  puts "     selected [llength $downSelection] connectors"
 } elseif { $nBlocks > 0 } {
   puts "Processing Blocks..."
   set downSelection [DownSelectBlocks $blocks]
+  puts "     selected [llength $downSelection] domains"
 } elseif { $nDatabases > 0 } {
   puts "TODO: Processing Databases..."
   exit
