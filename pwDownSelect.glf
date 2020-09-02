@@ -1,6 +1,8 @@
 package require PWI_Glyph
 pw::Script loadTk
 
+# This procedure returns all the connectors that make up the domain(s) passed
+# in domainList.
 proc DownSelectDomains { domainList } {
 
   set edges [list]
@@ -22,6 +24,8 @@ proc DownSelectDomains { domainList } {
   return [lsort -unique $connectors]
 }
 
+# This procedure returns all the domains that make up the block(s) passed in
+# blockList.
 proc DownSelectBlocks { blockList } {
 
   set faces [list]
@@ -62,11 +66,12 @@ if { !([pw::Display getSelectedEntities -selectionmask $mask selection]) } {
   }
 }
 
-# Get all selected entities
+# Get all selected entities.
 set domains    $selection(Domains)
 set blocks     $selection(Blocks)
 set databases  $selection(Databases)
 
+# Get entity counts.
 set nDomains   [llength $domains]
 set nBlocks    [llength $blocks]
 set nDatabases [llength $databases]
@@ -78,26 +83,30 @@ puts "Number of blocks:    $nBlocks"
 puts "Number of databases: $nDatabases"
 puts "###########################################################################"
 
-# TODO: implement a way for the user to specify what type of entity the want to
-# 'select down' with. I.e., if they've selected multiple types of entities,
+# TODO: implement a way for the user to specify what type of entity they want
+# to 'select down' with. I.e., if they've selected multiple types of entities,
 # present them with a dialog to let them select which the want to use.
 
+# This variable holds the grid/database entities that well be 'selected' when
+# this script completes.
 set downSelection [list]
 
-# For now, only act on the first list with anything in it.
+# For now, only act on the first list with anything in it. It is possible that
+# several different types of entities have been selected and passed to this
+# script.
 if { $nDomains > 0 } {
-  puts "Processing Domains..."
+  puts "Down selecting Domains..."
   set downSelection [DownSelectDomains $domains]
   puts "     selected [llength $downSelection] connectors"
 } elseif { $nBlocks > 0 } {
-  puts "Processing Blocks..."
+  puts "Down selecting Blocks..."
   set downSelection [DownSelectBlocks $blocks]
   puts "     selected [llength $downSelection] domains"
 } elseif { $nDatabases > 0 } {
   puts "TODO: Processing Databases..."
   exit
 } else {
-  puts "No valid entities to operate on, exiting"
+  puts "ERROR: No valid entities to operate on, exiting"
   exit
 }
 
