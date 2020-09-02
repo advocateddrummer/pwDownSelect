@@ -52,9 +52,9 @@ set nDatabases [llength $databases]
 
 puts "Selection summary"
 puts "###########################################################################"
-puts "Number of domains:   nDomains"
-puts "Number of blocks:    nBlocks"
-puts "Number of databases: nDatabases"
+puts "Number of domains:   $nDomains"
+puts "Number of blocks:    $nBlocks"
+puts "Number of databases: $nDatabases"
 puts "###########################################################################"
 
 # TODO: implement a way for the user to specify what type of entity the want to
