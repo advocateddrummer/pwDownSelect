@@ -22,6 +22,27 @@ proc DownSelectDomains { domainList } {
   return $connectors
 }
 
+proc DownSelectBlocks { blockList } {
+
+  set faces [list]
+  foreach b $blockList {
+    lappend faces {*}[$b getFaces]
+    #puts "block $b contains faces: [$b getFaces]"
+  }
+
+  set domains [list]
+  foreach f $faces {
+  # This strange syntax creates a flat list.
+    lappend domains {*}[$f getDomains]
+    #puts "face $f contains domains: [$f getDomains]"
+  }
+
+  #pw::Display setSelectedEntities $domains
+  #pw::Display update
+
+  return $domains
+}
+
 #
 # Use selected entity or prompt user for selection if nothing is selected at
 # run time. Currently only Blocks, Domains, and Databases are supported.
@@ -68,8 +89,8 @@ if { $nDomains > 0 } {
   puts "Processing Domains..."
   set downSelection [DownSelectDomains $domains]
 } elseif { $nBlocks > 0 } {
-  puts "TODO: Processing Blocks..."
-  exit
+  puts "Processing Blocks..."
+  set downSelection [DownSelectBlocks $blocks]
 } elseif { $nDatabases > 0 } {
   puts "TODO: Processing Databases..."
   exit
