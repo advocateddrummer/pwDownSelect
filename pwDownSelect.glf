@@ -149,9 +149,9 @@ puts "##########################################################################
 
 # TODO: implement a way for the user to specify what type of entity they want
 # to 'select down' with. I.e., if they've selected multiple types of entities,
-# present them with a dialog to let them select which the want to use.
+# present them with a dialog to let them select which they want to use.
 
-# This variable holds the grid/database entities that well be 'selected' when
+# This variable holds the grid/database entities that will be 'selected' when
 # this script completes.
 set downSelection [list]
 
