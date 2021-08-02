@@ -71,9 +71,9 @@ proc DownSelectQuilts { quiltList } {
   return [lsort -unique $boundaries]
 }
 
-# This procedure filters the database(s) pass in databaseList and calls either
-# the DownSelectModels or DownSelectQuilts procedure, bases on what it finds
-# therein. Models are preferred to quilts.
+# This procedure filters the database(s) passed in databaseList and calls
+# either the DownSelectModels or DownSelectQuilts procedure, based on what it
+# finds therein. Models are preferred to quilts.
 proc DownSelectDatabases { databaseList } {
 
   set nModels 0
